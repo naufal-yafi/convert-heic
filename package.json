@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "node index",
-    "clear": "rm -rf export"
+    "clear-e": "rm -rf export",
+    "clear-export": "rm -rf export",
+    "clear-i": "rm -rf import/*.HEIC",
+    "clear-import": "rm -rf export"
   },
   "repository": {
     "type": "git",

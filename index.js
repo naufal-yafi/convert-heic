@@ -3,6 +3,10 @@ import fs from "fs";
 import convert from "heic-convert";
 import path from "path";
 import { promisify } from "util";
+import calculate from "./src/calculate.js";
+import dateFormat from "./src/dateFormat.js";
+import stopwatch from "./src/stopwatch.js";
+import { green, red, yellow } from "./src/terminalColors.js";
 dotenv.config();
 
 const FORMAT =
@@ -33,18 +37,18 @@ const main = async () => {
     const TOTAL_FILES = heicFiles.length;
 
     if (TOTAL_FILES >= 50) {
-      console.log(`Total Images: ${red(TOTAL_FILES)}`);
+      console.log(`${green("Total Images:")} ${red(TOTAL_FILES)}`);
     } else if (TOTAL_FILES >= 30) {
-      console.log(`Total Images: ${yellow(TOTAL_FILES)}`);
+      console.log(`${green("Total Images:")} ${yellow(TOTAL_FILES)}`);
     } else {
-      console.log(`Total Images: ${green(TOTAL_FILES)}`);
+      console.log(`${green("Total Images:")} ${green(TOTAL_FILES)}`);
     }
 
     console.log(
       "If your file is small then the process needed doesn't take a lot of time.\n"
     );
 
-    console.log(`Process (${green(0)}/${TOTAL_FILES})... Please Wait`);
+    console.log(`Process (0/${TOTAL_FILES}) Starting`);
 
     if (heicFiles) {
       start = stopwatch();
@@ -59,11 +63,23 @@ const main = async () => {
           format: OUTPUT_FILE_EXTENSION,
         });
 
-        console.log(
-          `Process (${green(Number(index) + 1)}/${
-            TOTAL_FILES - Number(index + 1)
-          })... Please Wait`
-        );
+        if (Number(index) + 1 === TOTAL_FILES) {
+          console.log(
+            green(
+              `Process (${Number(index) + 1}/${
+                TOTAL_FILES - (Number(index) + 1)
+              }) Completed`
+            )
+          );
+        } else {
+          console.log(
+            yellow(
+              `Convert (${Number(index) + 1}/${
+                TOTAL_FILES - (Number(index) + 1)
+              }) Please Wait...`
+            )
+          );
+        }
 
         await promisify(fs.writeFile)(
           path.join(OUTPUT_FOLDER_PATH, `IMG-${index}-${dateFormat()}.jpg`),
@@ -73,93 +89,17 @@ const main = async () => {
 
       end = stopwatch();
       console.log(`\n${green("Success:")} Conversion has been successful.`);
-      calculate(start, end);
+      console.log({
+        start: start,
+        end: end,
+        time: calculate(start, end),
+      });
     } else {
       console.log(`\n${green("Err:")} No images with .HEIC format found.`);
     }
   } catch (error) {
     console.log(red("An error occurred:"), error);
   }
-};
-
-const dateFormat = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-
-  return `${year}${month}${day}-${hours}.${minutes}`;
-};
-
-const stopwatch = () => {
-  const now = new Date();
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-
-  return `${hours}:${minutes}`;
-};
-
-const calculate = (start, end) => {
-  const waktuAwal = start;
-  const waktuAkhir = end;
-
-  const [jamAwal, menitAwal] = waktuAwal.split(".").map(parseFloat);
-  const [jamAkhir, menitAkhir] = waktuAkhir.split(".").map(parseFloat);
-
-  const today = new Date();
-  const tanggalAwal = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    jamAwal,
-    menitAwal
-  );
-  const tanggalAkhir = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    jamAkhir,
-    menitAkhir
-  );
-
-  // Menghitung selisih waktu dalam milidetik
-  const selisihMilidetik = tanggalAkhir - tanggalAwal;
-
-  // Menghitung menit dan detik dari selisih waktu
-  const selisihDetik = selisihMilidetik / 1000;
-  const menit = Math.floor(selisihDetik / 60);
-  const detik = Math.round(selisihDetik % 60);
-
-  const red = (text) => `\x1b[31m${text}\x1b[0m`; // red color
-  const yellow = (text) => `\x1b[33m${text}\x1b[0m`; // yellow color
-  const green = (text) => `\x1b[32m${text}\x1b[0m`; // green color
-
-  const WITH_MINUTES = `${menit}m ${detik}s`;
-  const NO_MINUTES = `${detik}s`;
-
-  if (menit >= 10) {
-    console.log(`Time required: ${red(WITH_MINUTES)}`);
-  } else if (menit >= 3) {
-    console.log(`Time required: ${yellow(WITH_MINUTES)}`);
-  } else if (menit < 1) {
-    console.log(`Time required: ${green(NO_MINUTES)}`);
-  } else {
-    console.log(`Time required: ${green(WITH_MINUTES)}`);
-  }
-};
-
-const red = (text) => {
-  return `\x1b[31m${text}\x1b[0m`;
-};
-
-const green = (text) => {
-  return `\x1b[32m${text}\x1b[0m`;
-};
-
-const yellow = (text) => {
-  return `\x1b[33m${text}\x1b[0m`;
 };
 
 main();
