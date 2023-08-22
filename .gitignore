@@ -1,0 +1,6 @@
+/node_modules
+/export
+/import/*.HEIC
+/import/*.PNG
+/import/*.JPG
+/import/*.JPEG
