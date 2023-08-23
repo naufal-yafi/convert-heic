@@ -32,7 +32,9 @@ const ConvertImage = async (nameFile) => {
     const TOTAL_FILES = heicFiles.length;
 
     if (TOTAL_FILES == 0) {
-      console.log(`\n${red("Err:")} No images with .HEIC format found.`);
+      console.log(
+        `\n${red("Err:")} No images with .HEIC format found on folder import.`
+      );
     } else {
       if (TOTAL_FILES >= 50) {
         console.log(`${green("Total Images:")} ${red(TOTAL_FILES)}`);

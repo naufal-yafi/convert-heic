@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index -c jpeg",
+    "start": "node index -c",
+    "test": "node index -g",
     "clear-e": "rm -rf export",
     "clear-export": "rm -rf export",
     "clear-i": "rm -rf import/*.HEIC",
