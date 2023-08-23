@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index",
+    "start": "node index -c jpeg",
     "clear-e": "rm -rf export",
     "clear-export": "rm -rf export",
     "clear-i": "rm -rf import/*.HEIC",
@@ -25,7 +25,6 @@
   },
   "homepage": "https://github.com/naufal-yafi/convert-heic#readme",
   "dependencies": {
-    "dotenv": "^16.3.1",
     "heic-convert": "^1.2.4"
   }
 }
