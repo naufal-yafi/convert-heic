@@ -4,4 +4,7 @@
 /import/*.PNG
 /import/*.JPG
 /import/*.JPEG
-/duplicate_here
+/duplicate_here/*.HEIC
+/duplicate_here/*.PNG
+/duplicate_here/*.JPG
+/duplicate_here/*.JPEG
