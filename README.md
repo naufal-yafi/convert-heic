@@ -1,6 +1,8 @@
 # Convert Heic
 
-This tool is used to convert .HEIC image format to .jpg
+This tool is used to convert .HEIC image format to .jpg by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert).
+
+The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If NodeJS is already installed, download all the dependencies needed by typing `npm i`.
 
 # Table of Contents
 
