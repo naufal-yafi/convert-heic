@@ -79,10 +79,11 @@ const ConvertImage = async (nameFile) => {
           );
         }
 
-        let customFormat = `IMG-${index}-${dateFormat()}.jpg`;
+        const INDEXING = Number(index) + 1;
+        let customFormat = `IMG-${INDEXING}-${dateFormat()}.jpg`;
 
         if (nameFile != undefined) {
-          customFormat = `${nameFile}-${index}-${dateFormat()}.jpg`;
+          customFormat = `${nameFile}-${INDEXING}-${dateFormat()}.jpg`;
         }
 
         await promisify(fs.writeFile)(
