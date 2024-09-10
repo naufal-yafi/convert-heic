@@ -1,27 +1,19 @@
 {
-  "name": "convert-heic",
-  "version": "1.0.0",
-  "description": "Convert image heic format to png or jpg",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index -c",
-    "test": "node index -g"
+    "start": "node app -h",
+    "dev": "node app -h",
+    "lint": "eslint",
+    "format": "prettier --write ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/naufal-yafi/convert-heic.git"
-  },
-  "keywords": [
-    "convert-heic"
-  ],
-  "author": "Muhammad Naufal Yafi'",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/naufal-yafi/convert-heic/issues"
-  },
-  "homepage": "https://github.com/naufal-yafi/convert-heic#readme",
   "dependencies": {
     "heic-convert": "^1.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.10.0",
+    "eslint": "^9.10.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3"
   }
 }

@@ -1,10 +1,11 @@
 /node_modules
 /export
 /import/*.HEIC
-/import/*.PNG
-/import/*.JPG
-/import/*.JPEG
+/import/*.png
+/import/*.jpg
+/import/*.jpeg
 /duplicate_here/*.HEIC
-/duplicate_here/*.PNG
-/duplicate_here/*.JPG
-/duplicate_here/*.JPEG
+/duplicate_here/*.png
+/duplicate_here/*.jpg
+/duplicate_here/*.jpeg
+.temp
