@@ -1,6 +1,8 @@
 # Image Converter
 
-This tool is used to convert .HEIC image format to .jpg by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert).
+This tool is used to
+
+- convert .HEIC image format to .jpg by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert)
 
 The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If NodeJS is already installed, download all the dependencies needed by typing `npm i`.
 
@@ -9,86 +11,123 @@ The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If 
 - [Image Converter](#image-converter)
 - [Table of Contents](#table-of-contents)
   - [Convert Image](#convert-image)
-  - [Custom Name Output Files](#custom-name-output-files)
-  - [Duplicate Image](#duplicate-image)
     - [Command](#command)
+    - [Example Convert HEIC to JPEG](#example-convert-heic-to-jpeg)
+    - [Example Convert HEIC to PNG](#example-convert-heic-to-png)
+    - [Example Export Custom File Name](#example-export-custom-file-name)
+  - [Duplicate Image](#duplicate-image)
+    - [Command](#command-1)
     - [Example Duplicate One File](#example-duplicate-one-file)
     - [Example Custom Duplicate](#example-custom-duplicate)
   - [Clear Result Files](#clear-result-files)
-    - [Command](#command-1)
+    - [Command](#command-2)
     - [Example](#example)
 
 ## Convert Image
 
+! Previously fill the `./import` folder with image files according to the required extension
+
+```
+├── import
+|   ├── IMG-5892.HEIC
+|   ├── IMG-5893.HEIC
+│   └── ...
+```
+
+To convert image from HEIC to JPEG or PNG  
+To convert JPEG, PNG, JPG to WEBP
+
+### Command
+
+`node app convert <-f or --from> <..input_ext> <-t or --to> <..output_ext>`
+
+Descriptions:
+
+- <..input_ext> : extension format input file on `./import` you can field [HEIC, JPEG, PNG, JPG]
+- <..output_ext> : extension format output file on `./export` you can field [JPEG, PNG, WEBP]
+
+### Example Convert HEIC to JPEG
+
 ```sh
-node index -c
+node app convert -f HEIC -t JPEG
 ```
 
 Output:
 
 ```sh
-Total Images: 15
-If your file is small then the porcess needed does'nt take a lot of time.
+Total images: 2
+If your file is small in size, it won't take much time to process.
 
-Process (0/15) Starting
-Convert (1/14) Please Wait...
-Convert (2/13) Please Wait...
-Convert (3/12) Please Wait...
-...
-Process (15/0) Completed
+Process (0/2) Starting
+Process (1/1) Please Wait...
+Process (2/0) Completed
 
-Success: Conversion has been successful.
-{ start: '10:03:11', end: '10:03:58', time: '47s' }
+Success: Conversion has been successful
+{ start: '17:38:49', end: '17:38:58', duration: '9s' }
 ```
 
-Result:
-
 ```
-├── export
-|   ├── IMG-0-20230823-10.03.14.703.jpg
-|   ├── IMG-1-20230823-10.03.17.952.jpg
-│   ├── IMG-3-20230823-10.03.24.237.jpg
+├── export/convert-heic
+|   ├── IMG-1-20240910-17.38.53.197.JPEG
+|   ├── IMG-2-20240910-17.38.58.692.JPEG
 │   └── ...
 ```
 
 [[Table of Contents](#table-of-contents)]
 
-## Custom Name Output Files
+### Example Convert HEIC to PNG
 
 ```sh
-node index -c --name [custom-name-file]
-```
-
-Example:
-
-```sh
-node index -c --name flowers
+node app convert -f HEIC -t PNG
 ```
 
 Output:
 
 ```sh
-Total Images: 15
-If your file is small then the porcess needed does'nt take a lot of time.
+Total images: 2
+If your file is small in size, it won't take much time to process.
 
-Process (0/15) Starting
-Convert (1/14) Please Wait...
-Convert (2/13) Please Wait...
-Convert (3/12) Please Wait...
-...
-Process (15/0) Completed
+Process (0/2) Starting
+Process (1/1) Please Wait...
+Process (2/0) Completed
 
-Success: Conversion has been successful.
-{ start: '10:11:33', end: '10:12:20', time: '47s' }
+Success: Conversion has been successful
+{ start: '17:41:25', end: '17:41:36', duration: '11s' }
 ```
 
-Result:
+```
+├── export/convert-heic
+|   ├── IMG-1-20240910-17.41.29.812.PNG
+|   ├── IMG-2-20240910-17.41.36.373.PNG
+│   └── ...
+```
+
+[[Table of Contents](#table-of-contents)]
+
+### Example Export Custom File Name
+
+```sh
+node app convert -f HEIC -t JPEG hut-ri-79
+```
+
+Output:
+
+```sh
+Total images: 2
+If your file is small in size, it won't take much time to process.
+
+Process (0/2) Starting
+Process (1/1) Please Wait...
+Process (2/0) Completed
+
+Success: Conversion has been successful
+{ start: '17:44:56', end: '17:45:05', duration: '9s' }
+```
 
 ```
-├── export
-|   ├── flowers-0-20230823-10.11.37.134.jpg
-|   ├── flowers-1-20230823-10.11.40.321.jpg
-│   ├── flowers-3-20230823-10.11.46.463.jpg
+├── export/convert-heic
+|   ├── hut-ri-79-1-20240910-17.44.59.985.JPEG
+|   ├── hut-ri-79-2-20240910-17.45.05.179.JPEG
 │   └── ...
 ```
 
