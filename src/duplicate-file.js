@@ -6,7 +6,7 @@ import { Time } from './time.js';
 
 export class DuplicateFile {
   static #input_path = './import';
-  static #output_path = './export/duplicate-image';
+  static #output_path = './export/duplicate-images';
 
   static async startGenerate(input_ext, count) {
     if (input_ext === undefined) {
@@ -49,7 +49,7 @@ export class DuplicateFile {
           `\nSelected files: ${Terminal.color('green', SELECTED_FILE)}\n`,
         );
 
-        this.generateFile(
+        this.#generateFile(
           `${this.#input_path}/${SELECTED_FILE}`,
           this.#output_path,
           count,
@@ -62,7 +62,7 @@ export class DuplicateFile {
     }
   }
 
-  static generateFile(input_file, output_path, count, ext) {
+  static #generateFile(input_file, output_path, count, ext) {
     fs.readFile(input_file, (err, data) => {
       if (err) {
         Terminal.error(`reading the source file ${err}`);
