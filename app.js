@@ -1,3 +1,4 @@
+import { ConvertHEIC } from './src/convert-heic.js';
 import { DeleteFile } from './src/delete-file.js';
 import { DuplicateFile } from './src/duplicate-file.js';
 import { Terminal } from './src/terminal.js';
@@ -6,20 +7,14 @@ if (process.argv[2] === 'convert') {
   if (process.argv[3] === '-f' || process.argv[3] === '--from') {
     /*
       Convert image from .HEIC to PNG or JPEG or JPG
-      command: node app convert [-f, --from] HEIC [-t, --to] [PNG, JPEG, JPG]
+      command: node app convert [-f, --from] HEIC [-t, --to] [PNG, JPEG] [..custom_name_file]
     */
     if (process.argv[4] === 'HEIC') {
       if (process.argv[5] === '-t' || process.argv[5] === '--to') {
-        if (
-          process.argv[6] === 'PNG' ||
-          process.argv[6] === 'JPEG' ||
-          process.argv[6] === 'JPG'
-        ) {
-          console.log('//');
-
-          Terminal.exit();
+        if (process.argv[6] === 'PNG' || process.argv[6] === 'JPEG') {
+          ConvertHEIC.startConvert(process.argv[6], process.argv[7]);
         } else {
-          Terminal.error('Missing file format [PNG, JPG, JPEG]');
+          Terminal.error('Missing file format [PNG, JPEG]');
           Terminal.exit();
         }
       } else {
@@ -56,11 +51,6 @@ if (process.argv[2] === 'convert') {
     Terminal.exit();
   }
 }
-
-/*
-  Compress size
-  command: node app compress [PNG, JPEG, JPG]
-*/
 
 /*
   duplicate
