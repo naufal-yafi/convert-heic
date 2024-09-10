@@ -1,4 +1,4 @@
-# Convert Heic
+# Image Converter
 
 This tool is used to convert .HEIC image format to .jpg by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert).
 
@@ -6,14 +6,17 @@ The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If 
 
 # Table of Contents
 
-- [Convert Heic](#convert-heic)
+- [Image Converter](#image-converter)
 - [Table of Contents](#table-of-contents)
   - [Convert Image](#convert-image)
   - [Custom Name Output Files](#custom-name-output-files)
-  - [Clear Result Files on Folder ./export](#clear-result-files-on-folder-export)
-  - [Clear Files .HEIC on Folder ./import](#clear-files-heic-on-folder-import)
-  - [Duplicate Files](#duplicate-files)
-  - [Custom Duplicate Files](#custom-duplicate-files)
+  - [Duplicate Image](#duplicate-image)
+    - [Command](#command)
+    - [Example Duplicate One File](#example-duplicate-one-file)
+    - [Example Custom Duplicate](#example-custom-duplicate)
+  - [Clear Result Files](#clear-result-files)
+    - [Command](#command-1)
+    - [Example](#example)
 
 ## Convert Image
 
@@ -91,98 +94,89 @@ Result:
 
 [[Table of Contents](#table-of-contents)]
 
-## Clear Result Files on Folder ./export
+## Duplicate Image
+
+To duplicate an image **you must have 1 file** with the format _[HEIC, jpg, jpeg, png]_ in `./import`.
+
+### Command
+
+`node app duplicate <..ext> <..count_loops>`
+
+Descriptions:
+
+- <..ext> : image extension format you can use HEIC, jpg, jpeg, or png
+- <..count_loops> : how many images you want to duplicate, default = 1
+
+### Example Duplicate One File
 
 ```sh
-node index clear -e
-```
-
-OR
-
-```sh
-node index clear --export
-```
-
-[[Table of Contents](#table-of-contents)]
-
-## Clear Files .HEIC on Folder ./import
-
-```sh
-node index clear -i
-```
-
-OR
-
-```sh
-node index clear --import
+node app duplicate jpg
 ```
 
 Output:
 
 ```sh
-Deleted file: import\IMG_10_20230823-09.50.04.509_duplicated.HEIC
-Deleted file: import\IMG_2_20230823-09.50.04.508_duplicated.HEIC
-Deleted file: import\IMG_1_20230823-09.50.04.507_duplicated.HEIC
-...
-```
-
-[[Table of Contents](#table-of-contents)]
-
-## Duplicate Files
-
-Will be duplicated by 10 files in the `./duplicate_here` folder.
-
-```sh
-node index -g
-```
-
-If there are many files in the `./duplicate_here` folder, the bottom file will be selected.
-
-```sh
-$ node index -g
 Available Files:
-[1] IMG_1842.HEIC
-[2] IMG_1849.HEIC
+[1] IMG_20240816_150159_725.jpg
 
-Selected files: IMG_1849.HEIC
+Selected files: IMG_20240816_150159_725.jpg
 
-Total Duplicate: 10
-Success duplicate:  import\IMG_2_20230823-09.50.04.508_duplicated.HEIC
-Success duplicate:  import\IMG_1_20230823-09.50.04.507_duplicated.HEIC
-...
+Total duplicate: 1
+Duplicate: export/duplicate-images/IMG_1_20240910-16.11.05.757_duplicated.jpg
 ```
 
-## Custom Duplicate Files
-
-If you want to duplicate more than 10 files or less than 10 files, use this command.
+### Example Custom Duplicate
 
 ```sh
-node index -g [many-files-to-be-generated]
-```
-
-Example:
-
-```sh
-node index -g 5
+node app duplicate jpg 7
 ```
 
 Output:
 
 ```sh
-$ node index -g
 Available Files:
-[1] IMG_1842.HEIC
-[2] IMG_1849.HEIC
+[1] IMG_20240816_150159_725.jpg
 
-Selected files: IMG_1849.HEIC
+Selected files: IMG_20240816_150159_725.jpg
 
-Total Duplicate: 5
-Success duplicate:  import\IMG_2_20230823-09.57.25.650_duplicated.HEIC
-Success duplicate:  import\IMG_1_20230823-09.57.25.649_duplicated.HEIC
-Success duplicate:  import\IMG_4_20230823-09.57.25.650_duplicated.HEIC
-Success duplicate:  import\IMG_3_20230823-09.57.25.650_duplicated.HEIC
-Success duplicate:  import\IMG_5_20230823-09.57.25.650_duplicated.HEIC
-...
+Total duplicate: 7
+Duplicate: export/duplicate-images/IMG_1_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_2_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_3_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_4_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_6_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_5_20240910-16.13.13.670_duplicated.jpg
+Duplicate: export/duplicate-images/IMG_7_20240910-16.13.13.670_duplicated.jpg
+```
+
+[[Table of Contents](#table-of-contents)]
+
+## Clear Result Files
+
+This command can automatically delete all conversions that you have done in the `./export` folder.
+
+### Command
+
+`node app clear`
+
+### Example
+
+```sh
+node app clear
+```
+
+Output:
+
+```sh
+Deleting... on folder ./export/duplicate-images
+Delete: IMG_1_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_1_20240910-16.11.05.757_duplicated.jpg
+Delete: IMG_2_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_3_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_4_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_5_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_6_20240910-16.13.13.670_duplicated.jpg
+Delete: IMG_7_20240910-16.13.13.670_duplicated.jpg
 ```
 
 [[Table of Contents](#table-of-contents)]
