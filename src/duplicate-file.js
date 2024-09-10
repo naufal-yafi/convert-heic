@@ -9,11 +9,6 @@ export class DuplicateFile {
   static #output_path = './export/duplicate-images';
 
   static async startGenerate(input_ext, count) {
-    if (input_ext === undefined) {
-      Terminal.error('Missing ext');
-      Terminal.exit();
-    }
-
     try {
       if (!fs.existsSync(this.#input_path)) {
         fs.mkdirSync(this.#input_path);
@@ -79,10 +74,7 @@ export class DuplicateFile {
             Terminal.error(`duplicate file [${i}] ${writeErr}`);
           } else {
             console.log(
-              `${Terminal.color(
-                'green',
-                'Success',
-              )}: duplicate ${generateFilePath}`,
+              `${Terminal.color('green', 'Duplicate')}: ${generateFilePath}`,
             );
           }
         });
