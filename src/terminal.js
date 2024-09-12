@@ -10,7 +10,7 @@ export class Terminal {
     console.log(
       `${this.color(
         'yellow',
-        '-h --help',
+        '-h   help   --help',
       )}                        : show available commands`,
     );
 
@@ -33,6 +33,14 @@ export class Terminal {
     } else {
       return text;
     }
+  }
+
+  static info(text) {
+    console.info(text);
+  }
+
+  static log(text) {
+    console.log(text);
   }
 
   static error(message) {
