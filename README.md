@@ -2,25 +2,47 @@
 
 This tool is used to
 
-- convert .HEIC image format to .jpg by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert)
+- convert `.HEIC` image format to `.jpeg`/`.png` by utilizing the NPM package [heic-convert](https://www.npmjs.com/package/heic-convert)
+- convert `.png`/`.jpeg`/`.jpg` image format to `.webp` by utilizing the NPM package [sharp](https://www.npmjs.com/package/sharp)
 
-The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If NodeJS is already installed, download all the dependencies needed by typing `npm i`.
+The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If NodeJS is already installed, download all the dependencies needed by typing
+
+```sh
+npm install --production
+```
+
+To clear all result convert you can use
+
+```sh
+node app clear
+```
+
+Or read more [[How Clear Result Files](#clear-result-files)]
 
 # Table of Contents
 
 - [Image Converter](#image-converter)
 - [Table of Contents](#table-of-contents)
   - [Convert Image](#convert-image)
-    - [Command](#command)
-    - [Example Convert HEIC to JPEG](#example-convert-heic-to-jpeg)
-    - [Example Convert HEIC to PNG](#example-convert-heic-to-png)
-    - [Example Export Custom File Name](#example-export-custom-file-name)
+    - [HEIC](#heic)
+      - [Command](#command)
+      - [Convert HEIC to JPEG](#convert-heic-to-jpeg)
+      - [Convert HEIC to PNG](#convert-heic-to-png)
+      - [Export Custom File Name](#export-custom-file-name)
+    - [WEBP](#webp)
+      - [Command](#command-1)
+      - [Convert PNG to WEBP](#convert-png-to-webp)
+      - [Convert JPEG to WEBP](#convert-jpeg-to-webp)
+      - [Convert JPG to WEBP](#convert-jpg-to-webp)
+      - [Custom Quality](#custom-quality)
+      - [Custom Output Name File](#custom-output-name-file)
+      - [Custom Quality andOutput Name File](#custom-quality-andoutput-name-file)
   - [Duplicate Image](#duplicate-image)
-    - [Command](#command-1)
+    - [Command](#command-2)
     - [Example Duplicate One File](#example-duplicate-one-file)
     - [Example Custom Duplicate](#example-custom-duplicate)
   - [Clear Result Files](#clear-result-files)
-    - [Command](#command-2)
+    - [Command](#command-3)
     - [Example](#example)
 
 ## Convert Image
@@ -37,19 +59,22 @@ The equipment that must be prepared is only [NodeJS](https://nodejs.org/en). If 
 To convert image from HEIC to JPEG or PNG  
 To convert JPEG, PNG, JPG to WEBP
 
-### Command
+### HEIC
 
-`node app convert <-f or --from> <..input_ext> <-t or --to> <..output_ext>`
+#### Command
+
+`node app convert <-f or --from> <..input_ext> <-t or --to> <..output_ext> --name <..custom_name_file>`
 
 Descriptions:
 
-- <..input_ext> : extension format input file on `./import` you can field [HEIC, JPEG, PNG, JPG]
-- <..output_ext> : extension format output file on `./export` you can field [JPEG, PNG, WEBP]
+- <..input_ext> : extension format input file on `./import` you can field `heic`
+- <..output_ext> : extension format output file on `./export` you can field `jpeg` or `png`
+- --name <..name_file> : **(optional)** custom output name file
 
-### Example Convert HEIC to JPEG
+#### Convert HEIC to JPEG
 
 ```sh
-node app convert -f HEIC -t JPEG
+node app convert -f heic -t jpeg
 ```
 
 Output:
@@ -60,25 +85,39 @@ If your file is small in size, it won't take much time to process.
 
 Process (0/2) Starting
 Process (1/1) Please Wait...
+{
+  file: {
+    input: './import/IMG_5892.HEIC',
+    output: './export/convert-heic/IMG-1-20240912-03.37.43.796.jpeg'
+  },
+  size: { before: '1.04 MB', after: '2.48 MB' }
+}
 Process (2/0) Completed
+{
+  file: {
+    input: './import/IMG_5893.HEIC',
+    output: './export/convert-heic/IMG-2-20240912-03.37.49.146.jpeg'
+  },
+  size: { before: '4.75 MB', after: '7.65 MB' }
+}
 
 Success: Conversion has been successful
-{ start: '17:38:49', end: '17:38:58', duration: '9s' }
+{ start: '03:37:40', end: '03:37:49', duration: '9s' }
 ```
 
 ```
 ├── export/convert-heic
-|   ├── IMG-1-20240910-17.38.53.197.JPEG
-|   ├── IMG-2-20240910-17.38.58.692.JPEG
+|   ├── IMG-1-20240912-03.37.43.796.jpeg
+|   ├── IMG-2-20240912-03.37.49.146.jpeg
 │   └── ...
 ```
 
 [[Table of Contents](#table-of-contents)]
 
-### Example Convert HEIC to PNG
+#### Convert HEIC to PNG
 
 ```sh
-node app convert -f HEIC -t PNG
+node app convert -f heic -t png
 ```
 
 Output:
@@ -89,25 +128,43 @@ If your file is small in size, it won't take much time to process.
 
 Process (0/2) Starting
 Process (1/1) Please Wait...
+{
+  file: {
+    input: './import/IMG_5892.HEIC',
+    output: './export/convert-heic/IMG-1-20240912-03.39.28.51.png'
+  },
+  size: { before: '1.04 MB', after: '13.21 MB' }
+}
 Process (2/0) Completed
+{
+  file: {
+    input: './import/IMG_5893.HEIC',
+    output: './export/convert-heic/IMG-2-20240912-03.39.34.95.png'
+  },
+  size: { before: '4.75 MB', after: '28.86 MB' }
+}
 
 Success: Conversion has been successful
-{ start: '17:41:25', end: '17:41:36', duration: '11s' }
+{ start: '03:39:23', end: '03:39:34', duration: '11s' }
 ```
 
 ```
 ├── export/convert-heic
-|   ├── IMG-1-20240910-17.41.29.812.PNG
-|   ├── IMG-2-20240910-17.41.36.373.PNG
+|   ├── IMG-1-20240912-03.39.28.51.png
+|   ├── IMG-2-20240912-03.39.34.95.png
 │   └── ...
 ```
 
 [[Table of Contents](#table-of-contents)]
 
-### Example Export Custom File Name
+#### Export Custom File Name
+
+Command: `node app convert -f heic -t ..jpeg/png --name ..custom_name_file`
+
+Example:
 
 ```sh
-node app convert -f HEIC -t JPEG hut-ri-79
+node app convert -f heic -t jpeg --name hut-ri-79
 ```
 
 Output:
@@ -118,18 +175,86 @@ If your file is small in size, it won't take much time to process.
 
 Process (0/2) Starting
 Process (1/1) Please Wait...
+{
+  file: {
+    input: './import/IMG_5892.HEIC',
+    output: './export/convert-heic/hut-ri-79-1-20240912-03.40.59.326.jpeg'
+  },
+  size: { before: '1.04 MB', after: '2.48 MB' }
+}
 Process (2/0) Completed
+{
+  file: {
+    input: './import/IMG_5893.HEIC',
+    output: './export/convert-heic/hut-ri-79-2-20240912-03.41.04.556.jpeg'
+  },
+  size: { before: '4.75 MB', after: '7.65 MB' }
+}
 
 Success: Conversion has been successful
-{ start: '17:44:56', end: '17:45:05', duration: '9s' }
+{ start: '03:40:55', end: '03:41:04', duration: '9s' }
 ```
 
 ```
 ├── export/convert-heic
-|   ├── hut-ri-79-1-20240910-17.44.59.985.JPEG
-|   ├── hut-ri-79-2-20240910-17.45.05.179.JPEG
+|   ├── hut-ri-79-1-20240912-03.40.59.326.jpeg
+|   ├── hut-ri-79-2-20240912-03.41.04.556.jpeg
 │   └── ...
 ```
+
+[[Table of Contents](#table-of-contents)]
+
+### WEBP
+
+#### Command
+
+`node app convert <-f or --from> <..input_ext> <-t or --to> webp <..options>`
+
+Descriptions:
+
+- <..input_ext> : extension format input file on `./import` you can field [png, jpeg, jpg]
+- <..options> : **(optional)** custom quality and custom output file name
+  - --quality: you can field only number 1-**100** `default=80`
+  - --name: custom output name file
+
+#### Convert PNG to WEBP
+
+```sh
+node app convert -f png -t webp
+```
+
+#### Convert JPEG to WEBP
+
+#### Convert JPG to WEBP
+
+```sh
+node app convert -f jpg -t webp
+```
+
+Output:
+
+```sh
+If your file is small in size, it won't take much time to process.
+
+Process (0/1) Starting
+Process (1/0) Completed
+{ size: { before: '3.49 MB', after: '0.71 MB', compressed: '79.54%' } }
+
+Success: Conversion has been successful
+{ start: '14:09:45', end: '14:09:47', duration: '2s' }
+```
+
+```
+├── export/convert-webp
+|   ├── IMG-1-20240911-14.09.45.702.webp
+│   └── ...
+```
+
+#### Custom Quality
+
+#### Custom Output Name File
+
+#### Custom Quality andOutput Name File
 
 [[Table of Contents](#table-of-contents)]
 
@@ -144,7 +269,7 @@ To duplicate an image **you must have 1 file** with the format _[HEIC, jpg, jpeg
 Descriptions:
 
 - <..ext> : image extension format you can use HEIC, jpg, jpeg, or png
-- <..count_loops> : how many images you want to duplicate, default = 1
+- <..count_loops> : **(optional)** how many images you want to duplicate, **default = 1**
 
 ### Example Duplicate One File
 
