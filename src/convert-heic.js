@@ -23,7 +23,9 @@ export class ConvertHEIC {
       Ensure that there is a .HEIC file in the ./import folder, if the .HEIC file is not in the ./import folder then the process will be stopped.
     */
     if (TOTAL_FILES === 0) {
-      Terminal.error('No images with .HEIC format found on folder import.');
+      Terminal.error(
+        `No images with .HEIC format found on folder ${this.#input_path}`,
+      );
       Terminal.exit();
     } else if (TOTAL_FILES >= 50) {
       Terminal.info(`Total images: ${Terminal.color('red', TOTAL_FILES)}`);
