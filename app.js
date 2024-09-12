@@ -59,7 +59,7 @@ if (CALL_FUNCTION === 'convert') {
 
           if (OPTIONS === '--quality') {
             // node app convert [-f, --from] [PNG, JPEG, JPG] [-t, --to] webp --quality [..quality]
-            const INPUT_QUALITY = process.argv[8];
+            const INPUT_QUALITY = Number(process.argv[8]);
 
             ConvertWEBP.startConvert(EXT_INPUT_FROM, INPUT_QUALITY, undefined);
           } else if (OPTIONS === '--name') {
@@ -73,14 +73,10 @@ if (CALL_FUNCTION === 'convert') {
             );
           } else if (OPTIONS === '--option') {
             // node app convert [-f, --from] [PNG, JPEG, JPG] [-t, --to] webp --option [..quality] [..custom_name_file]
-            const INPUT_QUALITY = process.argv[8];
+            const INPUT_QUALITY = Number(process.argv[8]);
             const INPUT_CUSTOM_NAME = process.argv[9];
 
-            if (
-              INPUT_QUALITY === undefined ||
-              INPUT_QUALITY === null ||
-              INPUT_QUALITY === ''
-            ) {
+            if (INPUT_QUALITY === undefined || INPUT_QUALITY === null) {
               if (typeof INPUT_QUALITY !== 'number') {
                 Terminal.error('Input value quality only number, default: 80');
                 Terminal.exit();

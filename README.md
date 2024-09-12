@@ -1,3 +1,5 @@
+To contribute please read ([CONTRIBUTION.md](./CONTRIBUTION.md))
+
 # Image Converter
 
 This tool is used to
@@ -36,7 +38,7 @@ Or read more [[How Clear Result Files](#clear-result-files)]
       - [Convert JPG to WEBP](#convert-jpg-to-webp)
       - [Custom Quality](#custom-quality)
       - [Custom Output Name File](#custom-output-name-file)
-      - [Custom Quality andOutput Name File](#custom-quality-andoutput-name-file)
+      - [Custom Quality and Output Name File](#custom-quality-and-output-name-file)
   - [Duplicate Image](#duplicate-image)
     - [Command](#command-2)
     - [Example Duplicate One File](#example-duplicate-one-file)
@@ -223,7 +225,74 @@ Descriptions:
 node app convert -f png -t webp
 ```
 
+Output:
+
+```sh
+If your file is small in size, it won't take much time to process.
+
+Process (0/2) Starting
+Process (1/1) Please Wait...
+{
+  file: {
+    input: './import/IMG-2-20240910-17.41.36.373.png',
+    output: './export/convert-webp/IMG-1-20240912-04.19.16.612.webp'
+  },
+  size: { before: '28.86 MB', after: '4.08 MB', compressed: '85.85%' }
+}
+Process (2/0) Completed
+{
+  file: {
+    input: './import/transparent-logo-vector-8.png',
+    output: './export/convert-webp/IMG-2-20240912-04.19.18.884.webp'
+  },
+  size: { before: '0.12 MB', after: '0.05 MB', compressed: '56.10%' }
+}
+
+Success: Conversion has been successful
+{ start: '04:19:16', end: '04:19:18', duration: '2s' }
+```
+
+```
+├── export/convert-webp
+|   ├── IMG-1-20240912-04.19.16.612.webp
+|   ├── IMG-2-20240912-04.19.18.884.webp
+│   └── ...
+```
+
+[[Table of Contents](#table-of-contents)]
+
 #### Convert JPEG to WEBP
+
+```sh
+node app convert -f jpeg -t webp
+```
+
+```sh
+Total images: 1
+If your file is small in size, it won't take much time to process.
+
+Process (0/1) Starting
+Process (1/0) Completed
+{
+  file: {
+    input: './import/OIP.jpeg',
+    output: './export/convert-webp/IMG-1-20240912-04.20.47.925.webp'
+  },
+  size: { before: '0.02 MB', after: '0.01 MB', compressed: '29.30%' }
+}
+
+Success: Conversion has been successful
+{ start: '04:20:47', end: '04:20:47', duration: '0s' }
+```
+
+```
+├── export/convert-webp
+|   ├── IMG-1-20240912-04.19.16.612.webp
+|   ├── IMG-2-20240912-04.19.18.884.webp
+│   └── ...
+```
+
+[[Table of Contents](#table-of-contents)]
 
 #### Convert JPG to WEBP
 
@@ -234,27 +303,142 @@ node app convert -f jpg -t webp
 Output:
 
 ```sh
+Total images: 1
 If your file is small in size, it won't take much time to process.
 
 Process (0/1) Starting
 Process (1/0) Completed
-{ size: { before: '3.49 MB', after: '0.71 MB', compressed: '79.54%' } }
+{
+  file: {
+    input: './import/IMG_20240816_150159_725.jpg',
+    output: './export/convert-webp/IMG-1-20240912-04.22.54.29.webp'
+  },
+  size: { before: '3.49 MB', after: '0.71 MB', compressed: '79.54%' }
+}
 
 Success: Conversion has been successful
-{ start: '14:09:45', end: '14:09:47', duration: '2s' }
+{ start: '04:22:54', end: '04:22:55', duration: '1s' }
 ```
 
 ```
 ├── export/convert-webp
-|   ├── IMG-1-20240911-14.09.45.702.webp
+|   ├── IMG-1-20240912-04.22.54.29.webp
 │   └── ...
 ```
 
+[[Table of Contents](#table-of-contents)]
+
 #### Custom Quality
+
+Command: `node app convert -f ..png/jpeg/jpg -t webp --quality ..1,2,3,etc,default=80`
+
+Example:
+
+```sh
+node app convert -f jpg -t webp --quality 50
+```
+
+Output:
+
+```sh
+Total images: 1
+If your file is small in size, it won't take much time to process.
+
+Process (0/1) Starting
+Process (1/0) Completed
+{
+  file: {
+    input: './import/IMG_20240816_150159_725.jpg',
+    output: './export/convert-webp/IMG-1-20240912-04.28.38.36.webp'
+  },
+  size: { before: '3.49 MB', after: '0.38 MB', compressed: '89.06%' }
+}
+
+Success: Conversion has been successful
+{ start: '04:28:38', end: '04:28:39', duration: '1s' }
+```
+
+```
+├── export/convert-webp
+|   ├── IMG-1-20240912-04.28.38.36.webp
+│   └── ...
+```
+
+[[Table of Contents](#table-of-contents)]
 
 #### Custom Output Name File
 
-#### Custom Quality andOutput Name File
+Command: `node app convert -f ..png/jpeg/jpg -t webp --name ..custom_name_file`
+
+Example:
+
+```sh
+node app convert -f jpg -t webp --name hut-ri-79
+```
+
+Output:
+
+```sh
+Total images: 1
+If your file is small in size, it won't take much time to process.
+
+Process (0/1) Starting
+Process (1/0) Completed
+{
+  file: {
+    input: './import/IMG_20240816_150159_725.jpg',
+    output: './export/convert-webp/hut-ri-79-1-20240912-04.31.25.200.webp'
+  },
+  size: { before: '3.49 MB', after: '0.71 MB', compressed: '79.54%' }
+}
+
+Success: Conversion has been successful
+{ start: '04:31:25', end: '04:31:26', duration: '1s' }
+```
+
+```
+├── export/convert-webp
+|   ├── hut-ri-79-1-20240912-04.31.25.200.webp
+│   └── ...
+```
+
+[[Table of Contents](#table-of-contents)]
+
+#### Custom Quality and Output Name File
+
+Command: `node app convert -f ..png/jpeg/jpg -t webp --option ..1,2,3,etc,default=80 ..custom_name_file`
+
+Example:
+
+```sh
+node app convert -f jpg -t webp --option 30 hut-ri-79
+```
+
+Output:
+
+```sh
+Total images: 1
+If your file is small in size, it won't take much time to process.
+
+Process (0/1) Starting
+Process (1/0) Completed
+{
+  file: {
+    input: './import/IMG_20240816_150159_725.jpg',
+    output: './export/convert-webp/hut-ri-79-1-20240912-04.35.09.718.webp'
+  },
+  size: { before: '3.49 MB', after: '0.26 MB', compressed: '92.42%' }
+}
+
+Success: Conversion has been successful
+{ start: '04:35:09', end: '04:35:11', duration: '2s' }
+```
+
+```
+├── export/convert-webp
+|   ├── hut-ri-79-1-20240912-04.35.09.718.webp
+│   └── ...
+```
 
 [[Table of Contents](#table-of-contents)]
 
@@ -332,15 +516,17 @@ node app clear
 Output:
 
 ```sh
-Deleting... on folder ./export/duplicate-images
-Delete: IMG_1_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_1_20240910-16.11.05.757_duplicated.jpg
-Delete: IMG_2_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_3_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_4_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_5_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_6_20240910-16.13.13.670_duplicated.jpg
-Delete: IMG_7_20240910-16.13.13.670_duplicated.jpg
+success: Complete clear folder export
+Deleting... on folder ./export/duplocate-images
+Deleting... on folder ./export/compress-images
+Deleting... on folder ./export/convert-webp
+Deleting... on folder ./export/convert-heic
+Delete: IMG-1-20240912-00.17.59.449.png
+Delete: IMG-1-20240912-00.22.45.390.png
+Delete: IMG-2-20240912-00.18.05.604.png
+Delete: IMG-2-20240912-00.22.51.554.png
+Delete: IMG-1-20240912-03.37.43.796.jpeg
+...
 ```
 
 [[Table of Contents](#table-of-contents)]

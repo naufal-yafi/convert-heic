@@ -15,82 +15,106 @@ export class ConvertWEBP {
   static #sizeAfter;
   static #outputFile;
 
+  static #validateFile(files, input_ext) {
+    const TOTAL_FILES = files.length;
+
+    /*
+      Ensure that there is a .HEIC file in the ./import folder, if the .HEIC file is not in the ./import folder then the process will be stopped.
+    */
+    if (TOTAL_FILES === 0) {
+      Terminal.error(
+        `No images with ${input_ext} format found on folder ${this.#input_path}`,
+      );
+      Terminal.exit();
+    } else if (TOTAL_FILES >= 50) {
+      Terminal.info(`Total images: ${Terminal.color('red', TOTAL_FILES)}`);
+    } else if (TOTAL_FILES >= 30) {
+      Terminal.info(`Total images: ${Terminal.color('yellow', TOTAL_FILES)}`);
+    } else {
+      Terminal.info(`Total images: ${Terminal.color('green', TOTAL_FILES)}`);
+    }
+  }
+
+  static async #getFiles(input_ext) {
+    const files = await promisify(fs.readdir)(this.#input_path);
+    const images = files.filter(
+      (file) => path.extname(file) === `.${input_ext}`,
+    );
+
+    this.#validateFile(images, input_ext);
+
+    return images;
+  }
+
+  static #getNameFile(index, nameFile) {
+    if (nameFile !== undefined) {
+      /*
+        customize name file
+      */
+      return `${nameFile}-${index}-${Time.dateFormat()}.webp`;
+    }
+
+    return `IMG-${index}-${Time.dateFormat()}.webp`;
+  }
+
+  static #logProcess(index, totalFile) {
+    if (index === totalFile) {
+      Terminal.log(
+        Terminal.color(
+          'green',
+          `Process (${index}/${totalFile - index}) Completed`,
+        ),
+      );
+    } else {
+      Terminal.log(
+        Terminal.color(
+          'yellow',
+          `Process (${index}/${totalFile - index}) Please Wait...`,
+        ),
+      );
+    }
+  }
+
   static async startConvert(input_ext, inputQuality, nameFile) {
     try {
-      if (!fs.existsSync(this.#input_path)) {
-        fs.mkdirSync(this.#input_path);
-      }
+      Utils.checkAndPrepareFolder(this.#input_path, this.#output_path);
 
-      if (!fs.existsSync(this.#output_path)) {
-        fs.mkdirSync(this.#output_path);
-      }
-
-      const inputFiles = await promisify(fs.readdir)(this.#input_path);
-      const files = inputFiles.filter(
-        (file) => path.extname(file) === `.${input_ext}`,
-      );
-
+      const files = await this.#getFiles(input_ext);
       const TOTAL_FILES = files.length;
 
-      if (TOTAL_FILES === 0) {
-        Terminal.error(
-          `No images with ${input_ext} format found on folder import.`,
-        );
-        Terminal.exit();
-      } else if (TOTAL_FILES >= 50) {
-        console.log(`Total images: ${Terminal.color('red', TOTAL_FILES)}`);
-      } else if (TOTAL_FILES >= 30) {
-        console.log(`Total images: ${Terminal.color('yellow', TOTAL_FILES)}`);
-      } else {
-        console.log(`Total images: ${Terminal.color('green', TOTAL_FILES)}`);
-      }
-
-      console.log(
+      Terminal.info(
         "If your file is small in size, it won't take much time to process.\n",
       );
-      console.log(`Process (0/${TOTAL_FILES}) Starting`);
+      Terminal.log(`Process (0/${TOTAL_FILES}) Starting`);
       this.#start = Time.stopwatch();
 
       for (let index in files) {
+        const INDEXING = Number(index) + 1;
+
+        /*
+          ensure that the file exists
+        */
         const inputFile = await promisify(fs.readFile)(
           path.join(this.#input_path, files[index]),
         );
 
-        const INDEXING = Number(index) + 1;
-        let customFormat = `IMG-${INDEXING}-${Time.dateFormat()}.webp`;
+        /*
+          get size before file convert
+        */
+        this.#sizeBefore = Utils.getSizeFile(
+          `${this.#input_path}/${files[index]}`,
+        );
 
-        if (nameFile !== undefined) {
-          customFormat = `${nameFile}-${INDEXING}-${Time.dateFormat()}.webp`;
-        }
+        const NAME_FILE = this.#getNameFile(INDEXING, nameFile);
 
-        // get size before file convert to webp
-        this.#sizeBefore = fs.statSync(
-          path.join(this.#input_path, files[index]),
-        ).size;
+        /*
+          conversion process
+        */
+        await this.#convertWEBP(inputFile, inputQuality, NAME_FILE);
 
-        await this.#convertWEBP(inputFile, inputQuality, customFormat);
+        this.#logProcess(INDEXING, TOTAL_FILES);
 
-        if (Number(index) + 1 === TOTAL_FILES) {
-          console.log(
-            Terminal.color(
-              'green',
-              `Process (${Number(index) + 1}/${
-                TOTAL_FILES - (Number(index) + 1)
-              }) Completed`,
-            ),
-          );
-        } else {
-          console.log(
-            Terminal.color(
-              'yellow',
-              `Process (${Number(index) + 1}/${
-                TOTAL_FILES - (Number(index) + 1)
-              }) Please Wait...`,
-            ),
-          );
-        }
-
-        console.log({
+        Terminal.log({
           file: {
             input: `${this.#input_path}/${files[index]}`,
             output: this.#outputFile,
@@ -107,11 +131,11 @@ export class ConvertWEBP {
       }
 
       this.#end = Time.stopwatch();
-      console.log(
+      Terminal.info(
         `\n${Terminal.color('green', 'Success')}: Conversion has been successful`,
       );
 
-      console.log({
+      Terminal.info({
         start: this.#start,
         end: this.#end,
         duration: Time.calculate(this.#start, this.#end),
@@ -132,11 +156,14 @@ export class ConvertWEBP {
     ) {
       await sharp(file).webp({ quality: 80 }).toFile(outputConvertPath);
     } else {
+      /*
+        custom quality output
+      */
       await sharp(file)
         .webp({ quality: inputQuality })
         .toFile(outputConvertPath);
     }
 
-    this.#sizeAfter = fs.statSync(outputConvertPath).size;
+    this.#sizeAfter = Utils.getSizeFile(outputConvertPath);
   }
 }
