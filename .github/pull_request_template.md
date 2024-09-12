@@ -1,0 +1,5 @@
+- [ ] Read [CONTRIBUTION.md](./../CONTRIBUTION.md)
+- [ ] Using husky to commitlint and pre-commit checker, run `npm run prepare` after `npm i`.
+- [ ] My code follows the style guidelines of this project. Don't forget to run `npm run lint` and `npm run format`.
+- [ ] Don't disable eslint-rule in one or more files.
+- [ ] I have provided necessary comments in the code, particularly in hard-to-understand areas.
