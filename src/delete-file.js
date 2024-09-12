@@ -7,19 +7,38 @@ export class DeleteFile {
   static #folderExist = [
     '/duplicate-images',
     '/compress-images',
-    '/convert-images',
+    '/convert-heic',
+    '/convert-webp',
   ];
 
   static startDelete() {
     try {
-      for (const folder of this.#folderExist) {
-        const path = `${this.#pathExport}${folder}`;
-        if (fs.existsSync(path)) {
-          console.log(
-            `${Terminal.color('yellow', 'Deleting')}... on folder ${Terminal.color('green', path)}`,
-          );
-          this.#deletingFiles(path);
-        }
+      this.#deleting(`${this.#pathExport}${this.#folderExist[0]}`);
+      this.#deleting(`${this.#pathExport}${this.#folderExist[1]}`);
+      this.#deleting(`${this.#pathExport}${this.#folderExist[2]}`);
+      this.#deleting(`${this.#pathExport}${this.#folderExist[3]}`);
+
+      this.#deletingFolder();
+
+      console.log(
+        `\n${Terminal.color('green', 'success')}: Complete clear folder export`,
+      );
+    } catch (err) {
+      Terminal.error(`An error occurred ${err.message}`);
+      Terminal.exit();
+    }
+  }
+
+  static #deleting(folderPath) {
+    if (fs.existsSync(folderPath)) {
+      this.#deletingFiles(folderPath);
+    }
+  }
+
+  static async #deletingFolder() {
+    try {
+      if (fs.existsSync('./export')) {
+        await fs.promises.rm('./export', { recursive: true, force: true });
       }
     } catch (err) {
       Terminal.error(`An error occurred ${err.message}`);
@@ -31,10 +50,12 @@ export class DeleteFile {
     fs.readdir(folderPath, (err, files) => {
       if (err) {
         Terminal.error(`reading directory ${err.message}`);
-        Terminal.exit();
       }
 
       if (files.length > 0) {
+        console.log(
+          `${Terminal.color('yellow', 'Deleting')}... on folder ${Terminal.color('green', folderPath)}`,
+        );
         files.forEach((file) => {
           const filePath = path.join(folderPath, file);
 
@@ -48,7 +69,6 @@ export class DeleteFile {
         });
       } else {
         console.log(`Empty file on ${folderPath}`);
-        Terminal.exit();
       }
     });
   }
