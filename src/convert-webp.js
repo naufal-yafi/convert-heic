@@ -149,20 +149,9 @@ export class ConvertWEBP {
     const outputConvertPath = `${this.#output_path}/${nameFile}`;
     this.#outputFile = outputConvertPath;
 
-    if (
-      inputQuality === undefined ||
-      inputQuality === null ||
-      inputQuality === ''
-    ) {
-      await sharp(file).webp({ quality: 80 }).toFile(outputConvertPath);
-    } else {
-      /*
-        custom quality output
-      */
-      await sharp(file)
-        .webp({ quality: inputQuality })
-        .toFile(outputConvertPath);
-    }
+    await sharp(file)
+      .webp({ quality: inputQuality === undefined ? 80 : inputQuality })
+      .toFile(outputConvertPath);
 
     this.#sizeAfter = Utils.getSizeFile(outputConvertPath);
   }
