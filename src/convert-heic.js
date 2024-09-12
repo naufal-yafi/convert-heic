@@ -4,6 +4,7 @@ import path from 'path';
 import { promisify } from 'util';
 import { Terminal } from './terminal.js';
 import { Time } from './time.js';
+import { Utils } from './utils.js';
 
 export class ConvertHEIC {
   static #input_path = './import';
@@ -11,6 +12,9 @@ export class ConvertHEIC {
   static #input_ext = '.HEIC';
   static #start;
   static #end;
+  static #sizeBefore;
+  static #sizeAfter;
+  static #outputFile;
 
   static async startConvert(output_ext, nameFile) {
     try {
@@ -51,9 +55,14 @@ export class ConvertHEIC {
           path.join(this.#input_path, heicFiles[index]),
         );
 
+        // get size before file convert
+        this.#sizeBefore = fs.statSync(
+          path.join(this.#input_path, heicFiles[index]),
+        ).size;
+
         const outputConvert = await convert({
           buffer: inputFile,
-          format: output_ext,
+          format: output_ext.toUpperCase(),
         });
 
         if (Number(index) + 1 === TOTAL_FILES) {
@@ -77,16 +86,33 @@ export class ConvertHEIC {
         }
 
         const INDEXING = Number(index) + 1;
-        let customFormat = `IMG-${INDEXING}-${Time.dateFormat()}.${output_ext}`;
+        let customFormat = `IMG-${INDEXING}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
 
         if (nameFile !== undefined) {
-          customFormat = `${nameFile}-${INDEXING}-${Time.dateFormat()}.${output_ext}`;
+          customFormat = `${nameFile}-${INDEXING}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
         }
+
+        this.#outputFile = `${this.#output_path}/${customFormat}`;
 
         await promisify(fs.writeFile)(
           path.join(this.#output_path, customFormat),
           outputConvert,
         );
+
+        this.#sizeAfter = fs.statSync(
+          `${this.#output_path}/${customFormat}`,
+        ).size;
+
+        console.log({
+          file: {
+            input: `${this.#input_path}/${heicFiles[index]}`,
+            output: this.#outputFile,
+          },
+          size: {
+            before: Utils.convertToMB(this.#sizeBefore),
+            after: Utils.convertToMB(this.#sizeAfter),
+          },
+        });
       }
 
       this.#end = Time.stopwatch();
