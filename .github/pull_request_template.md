@@ -1,4 +1,4 @@
-- [ ] Read [CONTRIBUTION.md](./../CONTRIBUTION.md)
+- [ ] Read [CONTRIBUTION.md](https://github.com/naufal-yafi/image-converter/blob/main/CONTRIBUTION.md)
 - [ ] Using husky to commitlint and pre-commit checker, run `npm run prepare` after `npm i`.
 - [ ] My code follows the style guidelines of this project. Don't forget to run `npm run lint` and `npm run format`.
 - [ ] Don't disable eslint-rule in one or more files.
