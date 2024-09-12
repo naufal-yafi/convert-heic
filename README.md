@@ -71,7 +71,7 @@ Descriptions:
 
 - <..input_ext> : extension format input file on `./import` you can field `heic`
 - <..output_ext> : extension format output file on `./export` you can field `jpeg` or `png`
-- --name <..name_file> : **(optional)** custom output name file
+- --name <name_file> : **(optional)** custom output name file
 
 #### Convert HEIC to JPEG
 
@@ -216,8 +216,9 @@ Descriptions:
 
 - <..input_ext> : extension format input file on `./import` you can field [png, jpeg, jpg]
 - <..options> : **(optional)** custom quality and custom output file name
-  - --quality: you can field only number 1-**100** `default=80`
-  - --name: custom output name file
+  - --quality <1,2,3, ..100> : custom quality image, default=80
+  - --name <name_file> : custom output name file
+  - --option <1,2,3, ..100> <name_file> : custom quality and output name file
 
 #### Convert PNG to WEBP
 
@@ -368,7 +369,7 @@ Success: Conversion has been successful
 
 #### Custom Output Name File
 
-Command: `node app convert -f ..png/jpeg/jpg -t webp --name ..custom_name_file`
+Command: `node app convert -f ..png/jpeg/jpg -t webp --name <custom_name_file>`
 
 Example:
 
@@ -406,7 +407,7 @@ Success: Conversion has been successful
 
 #### Custom Quality and Output Name File
 
-Command: `node app convert -f ..png/jpeg/jpg -t webp --option ..1,2,3,etc,default=80 ..custom_name_file`
+Command: `node app convert -f ..png/jpeg/jpg -t webp --option <1,2,3,..100> <custom_name_file>`
 
 Example:
 
