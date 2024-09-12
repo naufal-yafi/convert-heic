@@ -16,94 +16,129 @@ export class ConvertHEIC {
   static #sizeAfter;
   static #outputFile;
 
+  static #validateHeicFiles(heicFiles) {
+    const TOTAL_FILES = heicFiles.length;
+
+    /*
+      Ensure that there is a .HEIC file in the ./import folder, if the .HEIC file is not in the ./import folder then the process will be stopped.
+    */
+    if (TOTAL_FILES === 0) {
+      Terminal.error('No images with .HEIC format found on folder import.');
+      Terminal.exit();
+    } else if (TOTAL_FILES >= 50) {
+      Terminal.info(`Total images: ${Terminal.color('red', TOTAL_FILES)}`);
+    } else if (TOTAL_FILES >= 30) {
+      Terminal.info(`Total images: ${Terminal.color('yellow', TOTAL_FILES)}`);
+    } else {
+      Terminal.info(`Total images: ${Terminal.color('green', TOTAL_FILES)}`);
+    }
+  }
+
+  static async #getHeicFiles() {
+    const files = await promisify(fs.readdir)(this.#input_path);
+    const heicFiles = files.filter(
+      (file) => path.extname(file) === this.#input_ext,
+    );
+
+    this.#validateHeicFiles(heicFiles);
+
+    return heicFiles;
+  }
+
+  static async #convertTo(inputFile, output_ext) {
+    /*
+      convert from .HEIC to jpeg or png
+    */
+    return await convert({
+      buffer: inputFile,
+      format: output_ext.toUpperCase(),
+    });
+  }
+
+  static #logProcess(index, totalFile) {
+    if (index === totalFile) {
+      Terminal.log(
+        Terminal.color(
+          'green',
+          `Process (${index}/${totalFile - index}) Completed`,
+        ),
+      );
+    } else {
+      Terminal.log(
+        Terminal.color(
+          'yellow',
+          `Process (${index}/${totalFile - index}) Please Wait...`,
+        ),
+      );
+    }
+  }
+
+  static #getNameFile(index, output_ext, nameFile) {
+    if (nameFile !== undefined) {
+      /*
+        customize name file
+      */
+      return `${nameFile}-${index}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
+    }
+
+    return `IMG-${index}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
+  }
+
   static async startConvert(output_ext, nameFile) {
     try {
-      if (!fs.existsSync(this.#input_path)) {
-        fs.mkdirSync(this.#input_path);
-      }
+      Utils.checkAndPrepareFolder(this.#input_path, this.#output_path);
 
-      if (!fs.existsSync(this.#output_path)) {
-        fs.mkdirSync(this.#output_path);
-      }
-
-      const inputFiles = await promisify(fs.readdir)(this.#input_path);
-      const heicFiles = inputFiles.filter(
-        (file) => path.extname(file) === this.#input_ext,
-      );
-
+      const heicFiles = await this.#getHeicFiles();
       const TOTAL_FILES = heicFiles.length;
 
-      if (TOTAL_FILES === 0) {
-        Terminal.error('No images with .HEIC format found on folder import.');
-        Terminal.exit();
-      } else if (TOTAL_FILES >= 50) {
-        console.log(`Total images: ${Terminal.color('red', TOTAL_FILES)}`);
-      } else if (TOTAL_FILES >= 30) {
-        console.log(`Total images: ${Terminal.color('yellow', TOTAL_FILES)}`);
-      } else {
-        console.log(`Total images: ${Terminal.color('green', TOTAL_FILES)}`);
-      }
-
-      console.log(
+      Terminal.info(
         "If your file is small in size, it won't take much time to process.\n",
       );
-      console.log(`Process (0/${TOTAL_FILES}) Starting`);
+      Terminal.log(`Process (0/${TOTAL_FILES}) Starting`);
       this.#start = Time.stopwatch();
 
       for (let index in heicFiles) {
+        const INDEXING = Number(index) + 1;
+
+        /*
+          ensure that the file exists
+        */
         const inputFile = await promisify(fs.readFile)(
           path.join(this.#input_path, heicFiles[index]),
         );
 
-        // get size before file convert
-        this.#sizeBefore = fs.statSync(
-          path.join(this.#input_path, heicFiles[index]),
-        ).size;
+        /*
+          get size before file convert
+        */
+        this.#sizeBefore = Utils.getSizeFile(
+          `${this.#input_path}/${heicFiles[index]}`,
+        );
 
-        const outputConvert = await convert({
-          buffer: inputFile,
-          format: output_ext.toUpperCase(),
-        });
+        /*
+          conversion process
+        */
+        const outputConvert = await this.#convertTo(inputFile, output_ext);
 
-        if (Number(index) + 1 === TOTAL_FILES) {
-          console.log(
-            Terminal.color(
-              'green',
-              `Process (${Number(index) + 1}/${
-                TOTAL_FILES - (Number(index) + 1)
-              }) Completed`,
-            ),
-          );
-        } else {
-          console.log(
-            Terminal.color(
-              'yellow',
-              `Process (${Number(index) + 1}/${
-                TOTAL_FILES - (Number(index) + 1)
-              }) Please Wait...`,
-            ),
-          );
-        }
+        this.#logProcess(INDEXING, TOTAL_FILES);
 
-        const INDEXING = Number(index) + 1;
-        let customFormat = `IMG-${INDEXING}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
+        const NAME_FILE = this.#getNameFile(INDEXING, output_ext, nameFile);
 
-        if (nameFile !== undefined) {
-          customFormat = `${nameFile}-${INDEXING}-${Time.dateFormat()}.${output_ext.toLowerCase()}`;
-        }
+        this.#outputFile = `${this.#output_path}/${NAME_FILE}`;
 
-        this.#outputFile = `${this.#output_path}/${customFormat}`;
-
+        /*
+          saves the file into the ./export folder
+        */
         await promisify(fs.writeFile)(
-          path.join(this.#output_path, customFormat),
+          path.join(this.#output_path, NAME_FILE),
           outputConvert,
         );
 
-        this.#sizeAfter = fs.statSync(
-          `${this.#output_path}/${customFormat}`,
-        ).size;
+        /*
+          get size after file convert
+        */
+        this.#sizeAfter = fs.statSync(`${this.#output_path}/${NAME_FILE}`).size;
 
-        console.log({
+        Terminal.log({
           file: {
             input: `${this.#input_path}/${heicFiles[index]}`,
             output: this.#outputFile,
@@ -116,11 +151,11 @@ export class ConvertHEIC {
       }
 
       this.#end = Time.stopwatch();
-      console.log(
+      Terminal.info(
         `\n${Terminal.color('green', 'Success')}: Conversion has been successful`,
       );
 
-      console.log({
+      Terminal.info({
         start: this.#start,
         end: this.#end,
         duration: Time.calculate(this.#start, this.#end),
